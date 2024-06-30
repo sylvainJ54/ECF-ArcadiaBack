@@ -36,7 +36,7 @@ class AnimalController extends AbstractController
             
             $responseData = $this->serializer->serialize( $animal, 'json');
             $location = $this->urlGenerator->generate(
-                'app_api_service_show',
+                'app_api_animal_show',
                 ['id' =>  $animal->getId()],
                 UrlGeneratorInterface::ABSOLUTE_URL,
             );

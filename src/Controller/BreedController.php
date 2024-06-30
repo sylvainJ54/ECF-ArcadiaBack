@@ -36,7 +36,7 @@ class BreedController extends AbstractController
             
             $responseData = $this->serializer->serialize($breed, 'json');
             $location = $this->urlGenerator->generate(
-                'app_api_Breed_show',
+                'app_api_breed_show',
                 ['id' => $breed->getId()],
                 UrlGeneratorInterface::ABSOLUTE_URL,
             );
