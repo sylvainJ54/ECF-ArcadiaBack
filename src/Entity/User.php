@@ -26,17 +26,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    // Remove this commented out code
 
     #[ORM\Column(length: 255)]
     private ?string $apiToken;
+
+    
+    public function getApiToken(): ?string
+
+    {
+        return $this->apiToken;
+    }
 
     /**@throws \Exception */
     public function __construct()
     {
         $this->apiToken = bin2hex(random_bytes(length: 20));
     }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -69,8 +76,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
-
+        // Add your custom implementation here
+        return 'username';
     }
 
     /**

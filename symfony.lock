@@ -50,6 +50,18 @@
             "./config/packages/nelmio_cors.yaml"
         ]
     },
+    "nelmio/security-bundle": {
+        "version": "3.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.4",
+            "ref": "65726efb67ff51d89de38195bc0d230fa811f64d"
+        },
+        "files": [
+            "./config/packages/nelmio_security.yaml"
+        ]
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.11",
         "recipe": {
