@@ -59,4 +59,5 @@ when@test:
             access_control:
                 - { path: ^/api/registration, roles : ROLE_ADMIN }
                 - { path: ^/api/login, roles: ROLE_USER }
+                - { path : ^/api/doc, roles : PUBLIC_ACCESS }
                 - { path: ^/api, roles : ROLE_USER }
