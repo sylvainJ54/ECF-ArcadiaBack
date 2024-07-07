@@ -36,7 +36,7 @@ class ApiTokenAuthenticationAuthenticator extends AbstractAuthenticator
         if (null === $user) {
             throw new UserNotFoundException();
         }
-        return new SelfValidatingPassport(new UserBadge($user->getEmail()));
+        return new SelfValidatingPassport(new UserBadge($user-> getEmail()));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -51,15 +51,4 @@ class ApiTokenAuthenticationAuthenticator extends AbstractAuthenticator
             Response::HTTP_UNAUTHORIZED
         );
     }
-
-//    public function start(Request $request, AuthenticationException $authException = null): Response
-//    {
-//        /*
-//         * If you would like this class to control what happens when an anonymous user accesses a
-//         * protected page (e.g. redirect to /login), uncomment this method and make this class
-//         * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
-//         *
-//         * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
-//         */
-//    }
 }
