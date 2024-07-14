@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Animal;
+use OpenApi\Annotations as OA;
 use App\Repository\AnimalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,32 @@ class AnimalController extends AbstractController
         
     }
     #[Route(methods: 'POST')]
+
+    /** @OA\Post(
+     *     path="/api/animal",
+     *     summary="Création d'un nouvel animal",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de l'animal à créer",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="name", type="string", example="Nom de l'animal"),
+     *             @OA\Property(property="state", type="string", example="Etat de lanimal"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Animal créé avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="name", type="string", example="Nom de l'animal"),
+     *             @OA\Property(property="VeterinaryReport", type="string", example="Rapport du vétérinaire"),
+     *         )
+     *     )
+     * )
+     */
+
     public function new(Request $request): JsonResponse
         {
             
@@ -44,7 +71,35 @@ class AnimalController extends AbstractController
             return new JsonResponse($responseData, Response::HTTP_CREATED,["location" => $location], true);
         }
     
-    #[Route('/', name:'show', methods:'GET')]
+    #[Route('/{id}', name:'show', methods:'GET')]
+
+    /** @OA\Get(
+     *     path="/api/animal/{id}",
+     *     summary="Affichage d'un animal",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Identifiant de l'animal",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Animal trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="name", type="string", example="Nom de l'animal"),
+     *             @OA\Property(property="VeterinaryReport", type="string", example="Rapport du vétérinaire"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Animal non trouvé"
+     *     )
+     * )
+     */
+
     public function show(int $id): JsonResponse
     {
         $animal = $this->repository->findOneBy(['id' => $id]);
@@ -56,7 +111,9 @@ class AnimalController extends AbstractController
         return new JsonResponse(data:null, status: Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/', name:'edit', methods: 'PUT')]
+    #[Route('/{id}', name:'edit', methods: 'PUT')]
+    
+
     public function edit(int $id, Request $request): JsonResponse
     {
         $animal = $this->repository->findOneBy(['id' => $id]);
@@ -73,7 +130,8 @@ class AnimalController extends AbstractController
         return new JsonResponse(data:null,status: Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/', name:'delete', methods: 'DELETE')]
+    #[Route('/{id}', name:'delete', methods: 'DELETE')]
+
     public function delete(int $id): Response
     {
         $animal = $this->repository->findOneBy(['id' => $id]);

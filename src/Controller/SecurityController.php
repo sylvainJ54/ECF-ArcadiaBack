@@ -64,6 +64,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/login', name: 'login', methods:'POST')]
+    
     /** @OA\Post(
      *     path="/api/login",
      *     summary="Connecter un utilisateur",

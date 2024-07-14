@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Breed;
+use OpenApi\Annotations as OA;
 use App\Repository\BreedRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,30 @@ class BreedController extends AbstractController
         
     }
     #[Route(methods: 'POST')]
+    
+        /** @OA\Post(
+     *     path="/api/breed",
+     *     summary="Création d'une nouvelle race d'animal",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de la race d'animal à créer",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="label", type="string", example="Nom de la race de l'animal")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="race d'animal créée avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="label", type="string", example="Nom de l'animal"),
+     *             @OA\Property(property="Vanimal", type="string", example="nom de l'animal"),
+     *         )
+     *     )
+     * )
+     */
     public function new(Request $request): JsonResponse
         {
             
@@ -44,7 +69,34 @@ class BreedController extends AbstractController
             return new JsonResponse($responseData, Response::HTTP_CREATED,["location" => $location], true);
         }
     
-    #[Route('/', name:'show', methods:'GET')]
+    #[Route('/{id}', name:'show', methods:'GET')]
+        /** @OA\Get(
+     *     path="/api/breed/{id}",
+     *     summary="Affichage d'une race ",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Identifiant de la race",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="race trouvée",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="label", type="string", example="Nom de la race"),
+     *             @OA\Property(property="animal", type="string", example="Animal de la race"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Animal non trouvé"
+     *     )
+     * )
+     */
+
     public function show(int $id): JsonResponse
     {
         $breed = $this->repository->findOneBy(['id' => $id]);

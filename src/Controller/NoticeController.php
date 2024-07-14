@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Notice;
+use OpenApi\Annotations as OA;
 use App\Repository\NoticeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,32 @@ class NoticeController extends AbstractController
         
     }
     #[Route(methods: 'POST')]
+        /** @OA\Post(
+     *     path="/api/notice",
+     *     summary="Création d'un avis",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Données de l'avis'",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="pseudo", type="string", example="pseudo de l'utilisateur"),
+     *             @OA\Property(property="comment", type="string", example="commenatire de l'utilisateur"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="avis créé avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="pseudo", type="string", example="pseudo de l'utilisateur"),
+     *             @OA\Property(property="comment", type="string", example="commentaire de l'utilisateur"),
+     *             @OA\Property(property="visible", type="boolean", example="est visible ou non"),
+     *         )
+     *     )
+     * )
+     */
+
     public function new(Request $request): JsonResponse
         {
             
@@ -44,7 +71,34 @@ class NoticeController extends AbstractController
             return new JsonResponse($responseData, Response::HTTP_CREATED,["location" => $location], true);
         }
     
-    #[Route('/', name:'show', methods:'GET')]
+    #[Route('/{id}', name:'show', methods:'GET')]
+    /** @OA\Get(
+     *     path="/api/notice/{id}",
+     *     summary="Affichage de l'avis",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Identifiant de l'avis",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="avis trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="pseudo", type="string", example="pseudo de l'utilisateur"),
+     *             @OA\Property(property="comment", type="string", example="commentaire de l'utilisateur"),
+     *             @OA\Property(property="visible", type="boolean", example="est visible ou non"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="avis non trouvé"
+     *     )
+     * )
+     */
     public function show(int $id): JsonResponse
     {
         $notice = $this->repository->findOneBy(['id' => $id]);
@@ -56,7 +110,42 @@ class NoticeController extends AbstractController
         return new JsonResponse(data:null, status: Response::HTTP_NOT_FOUND);
     }
 
-    #[Route('/', name:'edit', methods: 'PUT')]
+    #[Route('/{id}', name:'edit', methods: 'PUT')]
+    /**@OA\Put(
+     *   path="/api/notice/{id}",
+     *   summary="Editer l'avis",
+     *  @OA\RequestBody(
+     *         required=true,
+     *         description="Données de l'avis'",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="pseudo", type="string", example="pseudo de l'utilisateur"),
+     *             @OA\Property(property="comment", type="string", example="nouveau commenatire de l'utilisateur"),
+     *         ),
+     *  @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Identifiant de l'avis",
+     *         @OA\Schema(type="integer")
+     *  ),
+     *   @OA\Response(
+     *         response=200,
+     *         description="avis modifié",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="pseudo", type="string", example="pseudo de l'utilisateur"),
+     *             @OA\Property(property="comment", type="string", example="commentaire de l'utilisateur"),
+     *             @OA\Property(property="visible", type="boolean", example="est visible ou non"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="avis non trouvé"
+     *     )
+     * )
+     */
     public function edit(int $id, Request $request): JsonResponse
     {
         $notice = $this->repository->findOneBy(['id' => $id]);
